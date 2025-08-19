@@ -20,7 +20,7 @@ public class Contrato {
     private Vehiculos vehiculo;
     private LocalDate fechaInicio;
     private LocalDate fechaFin;
-    private EstadoContrato estado;
+    private EstadoContrato descripcion;
 
     
    
@@ -45,8 +45,8 @@ public class Contrato {
     }
 
     // Getters y Setters
-    public EstadoContrato getEstado() {   
-        return estado;
+    public EstadoContrato getdescripcion() {   
+        return descripcion;
     }
 
     public void setIdContrato(int idContrato) {
@@ -70,17 +70,17 @@ public class Contrato {
     }
 
     public void setEstado(EstadoContrato estado) {
-        this.estado = estado;
+        this.descripcion = descripcion;
     }
     
     public Contrato(int idContrato, Clientes cliente, Vehiculos vehiculo,
-                    LocalDate fechaInicio, LocalDate fechaFin, EstadoContrato estado) {
+                    LocalDate fechaInicio, LocalDate fechaFin, EstadoContrato descripcion) {
         this.idContrato = idContrato;
         this.cliente = cliente;
         this.vehiculo = vehiculo;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
-        this.estado = estado;
+        this.descripcion = descripcion;
     }
 
     @Override
@@ -91,7 +91,7 @@ public class Contrato {
                 ", vehiculo=" + vehiculo.getMarca() +
                 ", desde=" + fechaInicio +
                 ", hasta=" + fechaFin +
-                ", estado=" + estado +
+                ", estado=" + descripcion +
                 '}';
     }
 }
