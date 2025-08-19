@@ -4,6 +4,9 @@
  */
 package ValidadorUtil;
 
+import java.time.LocalDate;
+import java.time.Period;
+
 /**
  *
  * @author HP I3
@@ -30,6 +33,28 @@ public class Validador {
     // Validar licencia de conducir (9 dígitos en este ejemplo)
     public static boolean validarLicencia(String licencia) {
         return licencia != null && licencia.matches("\\d{9}");
+    }
+    
+    // Método para calcular la edad a partir de una fecha de nacimiento
+    public static int calcularEdad(LocalDate fechaNacimiento) {
+        if (fechaNacimiento == null) {
+            throw new IllegalArgumentException("La fecha de nacimiento no puede ser nula.");
+        }
+        return Period.between(fechaNacimiento, LocalDate.now()).getYears();
+    }
+
+    // Método para verificar si una fecha está dentro de un rango (inclusive)
+    public static boolean estaEnRango(LocalDate fecha, LocalDate inicio, LocalDate fin) {
+        if (fecha == null || inicio == null || fin == null) {
+            throw new IllegalArgumentException("Las fechas no pueden ser nulas.");
+        }
+        return (!fecha.isBefore(inicio) && !fecha.isAfter(fin));
+    }
+
+    // Método para verificar si la edad está dentro de un rango específico
+    public static boolean edadEnRango(LocalDate fechaNacimiento, int edadMin, int edadMax) {
+        int edad = calcularEdad(fechaNacimiento);
+        return edad >= edadMin && edad <= edadMax;
     }
 }
 
