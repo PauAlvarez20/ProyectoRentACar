@@ -65,9 +65,9 @@ public abstract class Vehiculos {
     }
     
     
-    public abstract double calcularTarifaPerzonalizada(int dias);
+    public abstract double calcularTarifaPersonalizada(int dias);
     
-    public boolean estDisponible(){
+    public boolean estaDisponible(){
       return estado == EstadoVehiculo.DISPONIBLE;   
         
     }
