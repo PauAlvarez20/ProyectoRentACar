@@ -17,8 +17,6 @@ public abstract class Vehiculos {
     private EstadoVehiculo estado; 
     
     
-    
-    
     public abstract double calcularTarifaPerzonalizada(int dias);
     
     public boolean estDisponible(){
