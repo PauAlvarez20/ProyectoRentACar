@@ -27,7 +27,7 @@ public enum TipoVehiculo {
     }
 
     public double getTarifaDiaria() {
-        return tarifaDiaria;
+        return tarifaDiaria; 
     }
     
     
