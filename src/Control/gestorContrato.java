@@ -12,7 +12,7 @@ import Vehiculo.Vehiculos;
 import java.util.ArrayList;
 /**
  *
- * @author HP I3
+ * @author paublo
  */
 public class gestorContrato {
 
