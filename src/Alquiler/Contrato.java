@@ -15,39 +15,14 @@ import java.time.LocalDate;
 
 
 public class Contrato {
+
     private int idContrato;
     private Clientes cliente;
     private Vehiculos vehiculo;
     private LocalDate fechaInicio;
     private LocalDate fechaFin;
-    private EstadoContrato descripcion;
-
-    
-   
-    public int getIdContrato() {
-        return idContrato;
-    }
-
-    public Clientes getCliente() {
-        return cliente;
-    }
-
-    public Vehiculos getVehiculo() {
-        return vehiculo;
-    }
-
-    public LocalDate getFechaInicio() {
-        return fechaInicio;
-    }
-
-    public LocalDate getFechaFin() {
-        return fechaFin;
-    }
-
-    // Getters y Setters
-    public EstadoContrato getdescripcion() {   
-        return descripcion;
-    }
+    private double monto;
+    private EstadoContrato estado;
 
     public void setIdContrato(int idContrato) {
         this.idContrato = idContrato;
@@ -69,31 +44,66 @@ public class Contrato {
         this.fechaFin = fechaFin;
     }
 
+    public void setMonto(double monto) {
+        this.monto = monto;
+    }
+
     public void setEstado(EstadoContrato estado) {
-        this.descripcion = descripcion;
+        this.estado = estado;
+    }
+
+     
+    public int getIdContrato() {
+        return idContrato;
+    }
+
+    public Clientes getCliente() {
+        return cliente;
+    }
+
+    public Vehiculos getVehiculo() {
+        return vehiculo;
+    }
+
+    public LocalDate getFechaInicio() {
+        return fechaInicio;
+    }
+
+    public LocalDate getFechaFin() {
+        return fechaFin;
+    }
+
+    public double getMonto() {
+        return monto;
+    }
+
+    public EstadoContrato getEstado() {
+        return estado;
     }
     
     public Contrato(int idContrato, Clientes cliente, Vehiculos vehiculo,
-                    LocalDate fechaInicio, LocalDate fechaFin, EstadoContrato descripcion) {
+                    LocalDate fechaInicio, LocalDate fechaFin, double tarifaDiaria) {
         this.idContrato = idContrato;
         this.cliente = cliente;
         this.vehiculo = vehiculo;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
-        this.descripcion = descripcion;
+        this.monto = tarifaDiaria * (fechaFin.toEpochDay() - fechaInicio.toEpochDay());
+        this.estado = EstadoContrato.ACTIVO;
+        this.vehiculo.getEstado(); // al iniciar contrato se ocupa el vehículo
     }
-    
-     public void finalizar() {
-        if (descripcion == EstadoContrato.ACTIVO) {
-            descripcion = EstadoContrato.FINALIZADO;
-            vehiculo.getEstado();
+
+    public void finalizar() {
+        if (estado == EstadoContrato.ACTIVO) {
+            estado = EstadoContrato.FINALIZADO;
+            vehiculo.getEstado(); // se libera el vehículo
         }
     }
 
     public void cancelar() {
-        if (descripcion == EstadoContrato.ACTIVO) {
-            descripcion = EstadoContrato.CANCELADO;
-            vehiculo.getEstado();
+        if (estado == EstadoContrato.ACTIVO) {
+            estado = EstadoContrato.CANCELADO;
+            vehiculo.getEstado(); // también se libera
         }
     }
 
@@ -105,9 +115,12 @@ public class Contrato {
                 ", vehiculo=" + vehiculo.getMarca() +
                 ", desde=" + fechaInicio +
                 ", hasta=" + fechaFin +
-                ", estado=" + descripcion +
+                ", monto=" + monto +
+                ", estado=" + estado +
                 '}';
     }
 }
+
+
 
 
