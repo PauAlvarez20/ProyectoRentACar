@@ -8,6 +8,7 @@ import ValidadorUtil.ValidadorVehiculo;
 import Vehiculo.EstadoVehiculo;
 import Vehiculo.TipoVehiculo;
 import Vehiculo.Vehiculos;
+import java.util.Collection;
 import java.util.HashMap;
 
 /**
@@ -34,6 +35,7 @@ public class GestorVehiculos {
         vehiculos.put(v.getPlaca(), v);
     }
 
+    //actualiza vehiculo que ya existe
     public void actualizarVehiculo(String placa, String modelo, TipoVehiculo tipo, EstadoVehiculo estado) throws Exception {
         Vehiculos v = vehiculos.get(placa);
         if (v == null) {
@@ -48,6 +50,7 @@ public class GestorVehiculos {
         v.setEstado(estado);
     }
 
+    //elimina el vehiculo, si no esta en alquiler
     public void eliminarVehiculo(String placa) throws Exception {
         Vehiculos v = vehiculos.get(placa);
         if (v == null) {
@@ -59,18 +62,13 @@ public class GestorVehiculos {
         vehiculos.remove(placa);
     }
 
+    //se busca por la placa
     public Vehiculos buscarVehiculo(String placa) {
         return vehiculos.get(placa);
     }
 
-    public void mostrarVehiculos() {
-        if (vehiculos.isEmpty()) {
-           
-        } else {
-            for (Vehiculos v : vehiculos.values()) {
-                
-            }
-        }
+    public Collection<Vehiculos> getVehiculos(){
+        return vehiculos.values();
     }
 }
 
