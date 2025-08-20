@@ -82,6 +82,20 @@ public class Contrato {
         this.fechaFin = fechaFin;
         this.descripcion = descripcion;
     }
+    
+     public void finalizar() {
+        if (descripcion == EstadoContrato.ACTIVO) {
+            descripcion = EstadoContrato.FINALIZADO;
+            vehiculo.getEstado();
+        }
+    }
+
+    public void cancelar() {
+        if (descripcion == EstadoContrato.ACTIVO) {
+            descripcion = EstadoContrato.CANCELADO;
+            vehiculo.getEstado();
+        }
+    }
 
     @Override
     public String toString() {
