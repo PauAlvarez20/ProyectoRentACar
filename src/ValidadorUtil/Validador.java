@@ -6,56 +6,89 @@ package ValidadorUtil;
 
 import java.time.LocalDate;
 import java.time.Period;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author HP I3
  */
 public class Validador {
-    
 
-    // Validar formato de correo
     public static boolean validarEmail(String email) {
+        if (email == null || email.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "El email no puede estar vacío.");
+            return false;
+        }
         String regex = "^[A-Za-z0-9+_.-]+@(.+)$";
-        return email != null && email.matches(regex);
+        if (!email.matches(regex)) {
+            JOptionPane.showMessageDialog(null, "El email no tiene un formato válido (ejemplo: usuario@correo.com).");
+            return false;
+        }
+        return true;
     }
 
-    // Validar teléfono (8 dígitos)
     public static boolean validarTelefono(String telefono) {
-        return telefono != null && telefono.matches("\\d{8}");
+        if (telefono == null || telefono.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "El teléfono no puede estar vacío.");
+            return false;
+        }
+        if (!telefono.matches("\\d{8}")) {
+            JOptionPane.showMessageDialog(null, "El teléfono debe contener exactamente 8 dígitos.");
+            return false;
+        }
+        return true;
     }
 
-    // Validar cédula (9 dígitos)
     public static boolean validarCedula(String cedula) {
-        return cedula != null && cedula.matches("\\d{9}");
+        if (cedula == null || cedula.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "La cédula no puede estar vacía.");
+            return false;
+        }
+        if (!cedula.matches("\\d{9}")) {
+            JOptionPane.showMessageDialog(null, "La cédula debe contener exactamente 9 dígitos.");
+            return false;
+        }
+        return true;
     }
 
-    // Validar licencia de conducir (9 dígitos en este ejemplo)
-    public static boolean validarLicencia(String licencia) {
-        return licencia != null && licencia.matches("\\d{9}");
+      public static boolean validarLicencia(String licencia) {
+        if (licencia == null || licencia.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "La licencia no puede estar vacía.");
+            return false;
+        }
+        if (!licencia.matches("\\d{9}")) {
+            JOptionPane.showMessageDialog(null, "La licencia debe contener exactamente 9 dígitos.");
+            return false;
+        }
+        return true;
     }
-    
-    // Método para calcular la edad a partir de una fecha de nacimiento
+
     public static int calcularEdad(LocalDate fechaNacimiento) {
         if (fechaNacimiento == null) {
+            JOptionPane.showMessageDialog(null, "La fecha de nacimiento no puede ser nula.");
             throw new IllegalArgumentException("La fecha de nacimiento no puede ser nula.");
         }
         return Period.between(fechaNacimiento, LocalDate.now()).getYears();
     }
 
-    // verificar si una fecha está dentro de un rango (inclusive)
-    public static boolean estaEnRango(LocalDate fecha, LocalDate inicio, LocalDate fin) {
+    public static boolean Rango(LocalDate fecha, LocalDate inicio, LocalDate fin) {
         if (fecha == null || inicio == null || fin == null) {
-            throw new IllegalArgumentException("Las fechas no pueden ser nulas.");
+            JOptionPane.showMessageDialog(null, "Las fechas no pueden ser nulas.");
+            return false;
         }
         return (!fecha.isBefore(inicio) && !fecha.isAfter(fin));
     }
 
-    //  verificar si la edad está dentro de un rango específico
     public static boolean edadEnRango(LocalDate fechaNacimiento, int edadMin, int edadMax) {
         int edad = calcularEdad(fechaNacimiento);
-        return edad >= edadMin && edad <= edadMax;
+        if (edad < edadMin || edad > edadMax) {
+            JOptionPane.showMessageDialog(null, "La edad debe estar entre " + edadMin + " y " + edadMax + " años.");
+            return false;
+        }
+        return true;
     }
 }
+
+
 
 
