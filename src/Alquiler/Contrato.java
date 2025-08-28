@@ -22,7 +22,7 @@ public class Contrato {
     private LocalDate fechaInicio;
     private LocalDate fechaFin;
     private double monto;
-    private EstadoContrato estado;
+    private EstadoContrato descripcion;
 
     public void setIdContrato(int idContrato) {
         this.idContrato = idContrato;
@@ -48,8 +48,8 @@ public class Contrato {
         this.monto = monto;
     }
 
-    public void setEstado(EstadoContrato estado) {
-        this.estado = estado;
+    public void setEstado(EstadoContrato descripcion) {
+        this.descripcion = descripcion;
     }
 
      
@@ -78,7 +78,7 @@ public class Contrato {
     }
 
     public EstadoContrato getEstado() {
-        return estado;
+        return descripcion;
     }
     
     public Contrato(int idContrato, Clientes cliente, Vehiculos vehiculo,
@@ -89,20 +89,19 @@ public class Contrato {
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
         this.monto = tarifaDiaria * (fechaFin.toEpochDay() - fechaInicio.toEpochDay());
-        this.estado = EstadoContrato.ACTIVO;
         this.vehiculo.getEstado(); // al iniciar contrato se ocupa el vehículo
     }
 
     public void finalizar() {
-        if (estado == EstadoContrato.ACTIVO) {
-            estado = EstadoContrato.FINALIZADO;
+        if (descripcion == EstadoContrato.ACTIVO) {
+            descripcion = EstadoContrato.FINALIZADO;
             vehiculo.getEstado(); // se libera el vehículo
         }
     }
 
     public void cancelar() {
-        if (estado == EstadoContrato.ACTIVO) {
-            estado = EstadoContrato.CANCELADO;
+        if (descripcion == EstadoContrato.ACTIVO) {
+            descripcion = EstadoContrato.CANCELADO;
             vehiculo.getEstado(); // también se libera
         }
     }
@@ -116,7 +115,7 @@ public class Contrato {
                 ", desde=" + fechaInicio +
                 ", hasta=" + fechaFin +
                 ", monto=" + monto +
-                ", estado=" + estado +
+                ", estado=" + descripcion +
                 '}';
     }
 }
