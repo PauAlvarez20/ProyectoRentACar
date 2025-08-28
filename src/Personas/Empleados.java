@@ -30,7 +30,7 @@ public class Empleados extends Personas {
         this.salario = salario;
     }
 
-    public Empleados(String puesto, double salario, String cedula, String nombre, LocalDate fechaNacimiento, String telefono, String correo) {
+    public Empleados(String cedula,  String nombre,LocalDate fechaNacimiento, String telefono,String correo, String puesto, double salario ) {
         super(cedula, nombre, fechaNacimiento, telefono, correo);
         this.puesto = puesto;
         this.salario = salario;
