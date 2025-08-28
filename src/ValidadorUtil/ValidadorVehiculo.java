@@ -15,14 +15,15 @@ import javax.swing.JOptionPane;
  */
 public class ValidadorVehiculo {
     
-    public static void validarYear(int year) {
+    public static boolean validarYear(int year) {
       int yearActual = Year.now().getValue();
         if (year > yearActual || (yearActual - year) > 20) {
             JOptionPane.showMessageDialog (null, "El año del vehículo es inválido", "Error de Validación",
                     JOptionPane.ERROR_MESSAGE
             );
+            return false;
         }  
-        
+        return true;
     }
     
     public static boolean validarTipo(TipoVehiculo tipo) {
