@@ -66,7 +66,6 @@ public class Validador {
     public static int calcularEdad(LocalDate fechaNacimiento) {
         if (fechaNacimiento == null) {
             JOptionPane.showMessageDialog(null, "La fecha de nacimiento no puede ser nula.");
-            throw new IllegalArgumentException("La fecha de nacimiento no puede ser nula.");
         }
         return Period.between(fechaNacimiento, LocalDate.now()).getYears();
     }
