@@ -17,8 +17,13 @@ public class Clientes extends Personas {
         return licencia;
     }
 
-    public Clientes(String licencia, String cedula, String nombre, LocalDate fechaNacimiento, String telefono, String correo) {
+    public void setLicencia(String licencia) {
+        this.licencia = licencia;
+    }
+
+    public Clientes(String cedula,  String nombre, LocalDate fechaNacimiento, String telefono, String correo,String licencia) {
         super(cedula, nombre, fechaNacimiento, telefono, correo);
+        
         this.licencia = licencia;
     }
     // excepcion si esta vacio o null manda la excepcion
