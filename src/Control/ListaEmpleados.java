@@ -14,6 +14,7 @@ import java.util.ArrayList;
 public class ListaEmpleados implements ListArray<Empleados>{
     private ArrayList<Empleados> listEmpleado= new ArrayList<>();
     
+    @Override
     public void add(Empleados empleado){
          for (Empleados e : listEmpleado) {
         if (e.getCedula().equals(empleado.getCedula())) {
@@ -23,10 +24,12 @@ public class ListaEmpleados implements ListArray<Empleados>{
         listEmpleado.add(empleado);
     }
     
+    @Override
     public void remove(Empleados empleado){
         listEmpleado.remove(empleado);
     }
     
+    @Override
     public Empleados find(String cedula){
           for (Empleados empleado : listEmpleado) {
         if (empleado.getCedula().equals(cedula)) {
