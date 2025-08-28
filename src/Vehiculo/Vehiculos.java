@@ -8,7 +8,7 @@ package Vehiculo;
  *
  * @author ccore
  */
-public abstract class Vehiculos {
+public class Vehiculos {
     private String placa;
     private String marca;
     private String modelo;
@@ -65,8 +65,6 @@ public abstract class Vehiculos {
     }
     
     
-    public abstract double calcularTarifaPersonalizada(int dias);
-    
     public boolean estaDisponible(){
       return estado == EstadoVehiculo.DISPONIBLE;   
         
@@ -85,6 +83,7 @@ public abstract class Vehiculos {
     public String toString() {
         return "Vehiculos{" + "placa=" + placa + ", marca=" + marca + ", modelo=" + modelo + ", year=" + year + ", tipo=" + tipo + ", estado=" + estado + '}';
     }
+
     
     
 }
