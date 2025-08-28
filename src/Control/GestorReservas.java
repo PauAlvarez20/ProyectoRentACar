@@ -9,58 +9,72 @@ import Personas.Clientes;
 import Vehiculo.EstadoVehiculo;
 import Vehiculo.Vehiculos;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedList;
+
+import java.util.Queue;
 
 /**
  *
  * @author ccore
  */
 public class GestorReservas{
-    
-    private List<Reserva> reservas;
-    private int contadorId; // Para generar ids únicos automaticos
+   
+    private Queue<Reserva> reservas; // Cola de reservas
+    private int contadorId; // Para generar ids únicos automáticos
 
     public GestorReservas() {
-        this.reservas = new ArrayList<>();
+        this.reservas = new LinkedList<>(); // LinkedList implementa Queue
         this.contadorId = 1;
     }
 
-     //crear reserva fechaReserva = hoy
-    public Reserva agregarReserva(Clientes cliente, Vehiculos vehiculo,LocalDate inicio, LocalDate fin) {
+    // Crear reserva con fechaReserva = hoy
+    public Reserva agregarReserva(Clientes cliente, Vehiculos vehiculo, LocalDate inicio, LocalDate fin) {
         int idReserva = contadorId++;
-        Reserva nueva = new Reserva(idReserva, cliente, vehiculo, LocalDate.now(), inicio);
-        reservas.add(nueva);
-        vehiculo.setEstado(EstadoVehiculo.ALQUILER); // Cambiar estado del vehículo
+        Reserva nueva = new Reserva(idReserva, cliente, vehiculo, LocalDate.now(), inicio, fin);
+        reservas.offer(nueva); // offer = agregar al final de la cola
+        vehiculo.setEstado(EstadoVehiculo.ALQUILER);
         return nueva;
     }
 
-   //se cancela la reserva por el id
-    public boolean cancelarReserva(int id) { 
-        Reserva r = buscarReservaPorId(id);
-        if (r != null) {
-            r.getVehiculo().setEstado(EstadoVehiculo.DISPONIBLE);
-            reservas.remove(r);
-            return true;
+    // Cancelar reserva por id
+    public boolean cancelarReserva(int id) {
+        for (Reserva reserva : reservas) {
+            if (reserva.getIdReserva() == id) {
+                reserva.getVehiculo().setEstado(EstadoVehiculo.DISPONIBLE);
+                reservas.remove(reserva);
+                return true;
+            }
         }
         return false;
     }
 
-   //busca la reserva por el id
+    // Buscar reserva por id
     public Reserva buscarReservaPorId(int id) {
-        for (Reserva r : reservas) {
-            if (r.getIdReserva() == id) {
-                return r;
+        for (Reserva reserva : reservas) {
+            if (reserva.getIdReserva() == id) {
+                return reserva;
             }
         }
         return null;
     }
 
-   
-    public List<Reserva> getReservas() {
-        return new ArrayList<>(reservas); // Retorna copia para no modificar la lista interna
+    // Obtener todas las reservas (copia para seguridad)
+    public Queue<Reserva> getReservas() {
+        return new LinkedList<>(reservas);
+    }
+
+    // Atender (sacar la primera reserva de la cola)
+    public Reserva atenderReserva() {
+        Reserva reserva = reservas.poll(); // poll = sacar la cabeza de la cola
+        if (reserva != null) {
+            reserva.getVehiculo().setEstado(EstadoVehiculo.DISPONIBLE);
+        }
+        return reserva;
     }
 }
+
+    
+
 
 
 
