@@ -5,6 +5,7 @@
 package ValidadorUtil;
 
 import java.time.LocalDate;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -12,16 +13,29 @@ import java.time.LocalDate;
  */
 public class ValidadorReserva {
     
-    public static void ValidarFechas(LocalDate inicio, LocalDate fin) throws Exception { 
-        if (inicio.isBefore(LocalDate.now())) {
-            throw new Exception("La fecha de inicio no puede ser anterior a hoy");
+    public static void ValidarFechas(LocalDate inicio, LocalDate fin) { 
+      if (inicio.isBefore(LocalDate.now())) {
+            JOptionPane.showMessageDialog(null, 
+                    "La fecha de inicio no puede ser anterior a hoy", "Error en fecha", 
+                    JOptionPane.ERROR_MESSAGE);
+            return;
         }
         if (fin.isBefore(inicio)){
-            throw new Exception("La fecha final debe ser posterior a la inicial");
+            JOptionPane.showMessageDialog(null, 
+                    "La fecha final debe ser posterior a la inicial", "Error en fecha", 
+                    JOptionPane.ERROR_MESSAGE);
+            return;
         }
         if (inicio.plusDays(30).isBefore(fin)){
-            throw new Exception("No se aceptan reservas de mas de 30 dias");
+            JOptionPane.showMessageDialog(null, 
+                    "No se aceptan reservas de más de 30 días", "Error en fecha", 
+                    JOptionPane.ERROR_MESSAGE);
+           
         }
-    }
+    }  
+          
+ }
+        
+            
      
-}
+
