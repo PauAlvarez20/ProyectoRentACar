@@ -19,8 +19,8 @@ import java.util.Queue;
  */
 public class GestorReservas{
    
-    private Queue<Reserva> reservas; // Cola de reservas
-    private int contadorId; // Para generar ids únicos automáticos
+    private Queue<Reserva> reservas; // list de reservas
+    private int contadorId; // Para generar ids únicosssss
 
     public GestorReservas() {
         this.reservas = new LinkedList<>(); // LinkedList implementa Queue
@@ -30,13 +30,13 @@ public class GestorReservas{
     // Crear reserva con fechaReserva = hoy
     public Reserva agregarReserva(Clientes cliente, Vehiculos vehiculo, LocalDate inicio, LocalDate fin) {
         int idReserva = contadorId++;
-        Reserva nueva = new Reserva(idReserva, cliente, vehiculo, LocalDate.now(), inicio, fin);
+        Reserva nueva = new Reserva(idReserva, cliente, vehiculo, inicio, fin);
         reservas.offer(nueva); // offer = agregar al final de la cola
         vehiculo.setEstado(EstadoVehiculo.ALQUILER);
         return nueva;
     }
 
-    // Cancelar reserva por id
+    // Cancelar reserva por id siempre
     public boolean cancelarReserva(int id) {
         for (Reserva reserva : reservas) {
             if (reserva.getIdReserva() == id) {
@@ -58,12 +58,12 @@ public class GestorReservas{
         return null;
     }
 
-    // Obtener todas las reservas (copia para seguridad)
+    // Obtener todas las reservas
     public Queue<Reserva> getReservas() {
         return new LinkedList<>(reservas);
     }
 
-    // Atender (sacar la primera reserva de la cola)
+    // Atender (sacar la primera reserva de la lista)
     public Reserva atenderReserva() {
         Reserva reserva = reservas.poll(); // poll = sacar la cabeza de la cola
         if (reserva != null) {
