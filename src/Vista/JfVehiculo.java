@@ -29,20 +29,20 @@ public class JfVehiculo extends javax.swing.JFrame {
         initComponents();
         configurarPantalla();
     }
-// En el constructor de JfVehiculos, después de initComponents();
+
 private void configurarPantalla() {
-    // 1) Combos
+    
     cmbTipo.removeAllItems();
     for (TipoVehiculo t : TipoVehiculo.values()) cmbTipo.addItem(t);
 
     cmbEstado.removeAllItems();
     for (EstadoVehiculo e : EstadoVehiculo.values()) cmbEstado.addItem(e);
 
-    // 2) Spinner Año (últimos 20 años hasta el actual)
+   
     int anioActual = java.time.Year.now().getValue();
     spYear.setModel(new javax.swing.SpinnerNumberModel(anioActual, anioActual - 20, anioActual, 1));
 
-    // 3) Tabla no editable
+    
     modeloTabla = new DefaultTableModel(
         new Object[][] {},
         new String[] {"Placa", "Marca", "Modelo", "Año", "Tipo", "Estado"}
@@ -52,14 +52,14 @@ private void configurarPantalla() {
     tblVehiculos.setModel(modeloTabla);
     tblVehiculos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-    // 4) Selección de fila -> cargar a los campos
+   
     tblVehiculos.getSelectionModel().addListSelectionListener(ev -> {
         if (!ev.getValueIsAdjusting()) cargarDesdeFilaSeleccionada();
     });
 
     refrescarTabla();
 }
-// Normaliza la placa para hablar con el Gestor/HashMap
+
 private String normalizarPlaca() {
     return txtPlaca.getText().trim().toUpperCase();
 }
@@ -72,7 +72,7 @@ private void limpiarCampos() {
     if (cmbTipo.getItemCount() > 0) cmbTipo.setSelectedIndex(0);
     if (cmbEstado.getItemCount() > 0) cmbEstado.setSelectedIndex(0);
     tblVehiculos.clearSelection();
-    txtPlaca.setEditable(true);   // por si la deshabilitas al seleccionar
+    txtPlaca.setEditable(true);   
 }
 private void cargarDesdeFilaSeleccionada() {
     int fila = tblVehiculos.getSelectedRow();
@@ -83,13 +83,13 @@ private void cargarDesdeFilaSeleccionada() {
     txtModelo.setText(String.valueOf(modeloTabla.getValueAt(fila, 2)));
     spYear.setValue(Integer.parseInt(String.valueOf(modeloTabla.getValueAt(fila, 3))));
 
-    // Si guardas los enums como name() en la tabla, esto funciona directo:
+    
     String tipoStr = String.valueOf(modeloTabla.getValueAt(fila, 4));
     String estadoStr = String.valueOf(modeloTabla.getValueAt(fila, 5));
     cmbTipo.setSelectedItem(TipoVehiculo.valueOf(tipoStr));
     cmbEstado.setSelectedItem(EstadoVehiculo.valueOf(estadoStr));
 
-    // Evita que cambien placa al actualizar/eliminar
+   
     txtPlaca.setEditable(false);
 }
 private void refrescarTabla() {
@@ -359,7 +359,7 @@ private void refrescarTabla() {
         cmbEstado.setSelectedItem(v.getEstado());
         txtPlaca.setEditable(false);
 
-        // Seleccionar fila correspondiente en la tabla (si está listada)
+       
         for (int i = 0; i < modeloTabla.getRowCount(); i++) {
             if (String.valueOf(modeloTabla.getValueAt(i, 0)).equalsIgnoreCase(v.getPlaca())) {
                 tblVehiculos.setRowSelectionInterval(i, i);
