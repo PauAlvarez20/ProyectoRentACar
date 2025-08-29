@@ -10,33 +10,48 @@ import Vehiculo.EstadoVehiculo;
 import Vehiculo.Vehiculos;
 import java.time.LocalDate;
 import java.util.LinkedList;
-
 import java.util.Queue;
+import java.util.List;
 
 /**
  *
  * @author ccore
  */
 public class GestorReservas{
-   
-    private Queue<Reserva> reservas; // list de reservas
-    private int contadorId; // Para generar ids únicosssss
+   private Queue<Reserva> reservas; 
+   private int contadorId; 
+   private List<Clientes>listClientes;
+
 
     public GestorReservas() {
-        this.reservas = new LinkedList<>(); // LinkedList implementa Queue
+        this.reservas = new LinkedList<>(); 
         this.contadorId = 1;
     }
+       
 
-    // Crear reserva con fechaReserva = hoy
+    // crea reserva con fechaReserva = hoy
     public Reserva agregarReserva(Clientes cliente, Vehiculos vehiculo, LocalDate inicio, LocalDate fin) {
+        Clientes clienteEncontrado = null; //empieza a buscar cliente en lista
+        for (Clientes c : listClientes) {
+            if (c.getCedula().equals(cliente.getCedula())) { 
+                clienteEncontrado = c;
+                break;
+            }
+        }
+
+        if (clienteEncontrado == null) {
+            throw new IllegalArgumentException("El cliente con id " + cliente.getCedula() + " no existe en la lista");
+        }
+
         int idReserva = contadorId++;
-        Reserva nueva = new Reserva(idReserva, cliente, vehiculo, inicio, fin);
-        reservas.offer(nueva); // offer = agregar al final de la cola
+        Reserva nueva = new Reserva(idReserva, clienteEncontrado, vehiculo, LocalDate.now(), inicio);
+
+        reservas.offer(nueva); 
         vehiculo.setEstado(EstadoVehiculo.ALQUILER);
         return nueva;
     }
 
-    // Cancelar reserva por id siempre
+    // cancelar reserva por id
     public boolean cancelarReserva(int id) {
         for (Reserva reserva : reservas) {
             if (reserva.getIdReserva() == id) {
@@ -48,7 +63,7 @@ public class GestorReservas{
         return false;
     }
 
-    // Buscar reserva por id
+    // buscar reserva por id
     public Reserva buscarReservaPorId(int id) {
         for (Reserva reserva : reservas) {
             if (reserva.getIdReserva() == id) {
@@ -58,19 +73,20 @@ public class GestorReservas{
         return null;
     }
 
-    // Obtener todas las reservas
+    // obtener todas las reservas
     public Queue<Reserva> getReservas() {
         return new LinkedList<>(reservas);
     }
 
-    // Atender (sacar la primera reserva de la lista)
+    // sacar la primera reserva de la lista)
     public Reserva atenderReserva() {
-        Reserva reserva = reservas.poll(); // poll = sacar la cabeza de la cola
+        Reserva reserva = reservas.poll(); 
         if (reserva != null) {
             reserva.getVehiculo().setEstado(EstadoVehiculo.DISPONIBLE);
         }
         return reserva;
     }
+    
 }
 
     
