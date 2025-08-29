@@ -41,13 +41,6 @@ public class gestorContrato {
     }
 
 
-    // Finalizar un contrato
-    public void finalizarContrato(int index) {
-        Contrato contrato = getContrato(index);
-        if (contrato != null) {
-            contrato.finalizar();
-        }
-    }
 
     // Mostrar todos los contratos
     public List<String> listarContratos() {
