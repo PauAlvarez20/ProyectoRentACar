@@ -3,8 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Alquiler;
-import Personas.Clientes;
-import Vehiculo.Vehiculos;
+
 import java.time.LocalDate;
 /**
  *
@@ -17,8 +16,7 @@ import java.time.LocalDate;
 public class Contrato {
 
     private int idContrato;
-    private Clientes cliente;
-    private Vehiculos vehiculo;
+    private Reserva reserva;
     private LocalDate fechaInicio;
     private LocalDate fechaFin;
     private double monto;
@@ -28,14 +26,12 @@ public class Contrato {
         this.idContrato = idContrato;
     }
 
-    public void setCliente(Clientes cliente) {
-        this.cliente = cliente;
+    public Reserva getReserva() {
+        return reserva;
     }
-
-    public void setVehiculo(Vehiculos vehiculo) {
-        this.vehiculo = vehiculo;
-    }
-
+    
+    
+    
     public void setFechaInicio(LocalDate fechaInicio) {
         this.fechaInicio = fechaInicio;
     }
@@ -57,14 +53,6 @@ public class Contrato {
         return idContrato;
     }
 
-    public Clientes getCliente() {
-        return cliente;
-    }
-
-    public Vehiculos getVehiculo() {
-        return vehiculo;
-    }
-
     public LocalDate getFechaInicio() {
         return fechaInicio;
     }
@@ -81,43 +69,35 @@ public class Contrato {
         return descripcion;
     }
     
-    public Contrato(int idContrato, Clientes cliente, Vehiculos vehiculo,
-                    LocalDate fechaInicio, LocalDate fechaFin, double tarifaDiaria) {
-        this.idContrato = idContrato;
-        this.cliente = cliente;
-        this.vehiculo = vehiculo;
+    public Contrato(int idContrato, LocalDate fechaInicio,Reserva reserva, LocalDate fechaFin, double tarifaDiaria) {
+        this.reserva = reserva;
+        this.idContrato = idContrato;       
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
         this.monto = tarifaDiaria * (fechaFin.toEpochDay() - fechaInicio.toEpochDay());
-        this.vehiculo.getEstado(); // al iniciar contrato se ocupa el vehículo
+        
     }
 
     public void finalizar() {
         if (descripcion == EstadoContrato.ACTIVO) {
             descripcion = EstadoContrato.FINALIZADO;
-            vehiculo.getEstado(); // se libera el vehículo
+            reserva.getIdReserva();// se libera el vehículo
         }
     }
 
     public void cancelar() {
         if (descripcion == EstadoContrato.ACTIVO) {
             descripcion = EstadoContrato.CANCELADO;
-            vehiculo.getEstado(); // también se libera
+           reserva.getIdReserva(); // también se libera
         }
     }
 
     @Override
     public String toString() {
-        return "Contrato{" +
-                "id=" + idContrato +
-                ", cliente=" + cliente.getNombre() +
-                ", vehiculo=" + vehiculo.getMarca() +
-                ", desde=" + fechaInicio +
-                ", hasta=" + fechaFin +
-                ", monto=" + monto +
-                ", estado=" + descripcion +
-                '}';
+        return "Contrato{" + "idContrato=" + idContrato + ", reserva=" + reserva + ", fechaInicio=" + fechaInicio + ", fechaFin=" + fechaFin + ", monto=" + monto + ", descripcion=" + descripcion + '}';
     }
+
+    
 }
 
 
