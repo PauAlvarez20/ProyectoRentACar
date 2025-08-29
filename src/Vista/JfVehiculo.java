@@ -4,6 +4,14 @@
  */
 package Vista;
 
+import Control.GestorVehiculos;
+import Vehiculo.EstadoVehiculo;
+import Vehiculo.TipoVehiculo;
+import Vehiculo.Vehiculos;
+import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author galla
@@ -11,13 +19,92 @@ package Vista;
 public class JfVehiculo extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JfVehiculo.class.getName());
+    private final GestorVehiculos gestor = new GestorVehiculos();
+    private DefaultTableModel modeloTabla;
 
     /**
      * Creates new form JfVehiculo
      */
     public JfVehiculo() {
         initComponents();
+        configurarPantalla();
     }
+// En el constructor de JfVehiculos, después de initComponents();
+private void configurarPantalla() {
+    // 1) Combos
+    cmbTipo.removeAllItems();
+    for (TipoVehiculo t : TipoVehiculo.values()) cmbTipo.addItem(t);
+
+    cmbEstado.removeAllItems();
+    for (EstadoVehiculo e : EstadoVehiculo.values()) cmbEstado.addItem(e);
+
+    // 2) Spinner Año (últimos 20 años hasta el actual)
+    int anioActual = java.time.Year.now().getValue();
+    spYear.setModel(new javax.swing.SpinnerNumberModel(anioActual, anioActual - 20, anioActual, 1));
+
+    // 3) Tabla no editable
+    modeloTabla = new DefaultTableModel(
+        new Object[][] {},
+        new String[] {"Placa", "Marca", "Modelo", "Año", "Tipo", "Estado"}
+    ) {
+        @Override public boolean isCellEditable(int row, int column) { return false; }
+    };
+    tblVehiculos.setModel(modeloTabla);
+    tblVehiculos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+    // 4) Selección de fila -> cargar a los campos
+    tblVehiculos.getSelectionModel().addListSelectionListener(ev -> {
+        if (!ev.getValueIsAdjusting()) cargarDesdeFilaSeleccionada();
+    });
+
+    refrescarTabla();
+}
+// Normaliza la placa para hablar con el Gestor/HashMap
+private String normalizarPlaca() {
+    return txtPlaca.getText().trim().toUpperCase();
+}
+private void limpiarCampos() {
+    txtPlaca.setText("");
+    txtMarca.setText("");
+    txtModelo.setText("");
+    int anioActual = java.time.Year.now().getValue();
+    spYear.setValue(anioActual);
+    if (cmbTipo.getItemCount() > 0) cmbTipo.setSelectedIndex(0);
+    if (cmbEstado.getItemCount() > 0) cmbEstado.setSelectedIndex(0);
+    tblVehiculos.clearSelection();
+    txtPlaca.setEditable(true);   // por si la deshabilitas al seleccionar
+}
+private void cargarDesdeFilaSeleccionada() {
+    int fila = tblVehiculos.getSelectedRow();
+    if (fila < 0) return;
+
+    txtPlaca.setText(String.valueOf(modeloTabla.getValueAt(fila, 0)));
+    txtMarca.setText(String.valueOf(modeloTabla.getValueAt(fila, 1)));
+    txtModelo.setText(String.valueOf(modeloTabla.getValueAt(fila, 2)));
+    spYear.setValue(Integer.parseInt(String.valueOf(modeloTabla.getValueAt(fila, 3))));
+
+    // Si guardas los enums como name() en la tabla, esto funciona directo:
+    String tipoStr = String.valueOf(modeloTabla.getValueAt(fila, 4));
+    String estadoStr = String.valueOf(modeloTabla.getValueAt(fila, 5));
+    cmbTipo.setSelectedItem(TipoVehiculo.valueOf(tipoStr));
+    cmbEstado.setSelectedItem(EstadoVehiculo.valueOf(estadoStr));
+
+    // Evita que cambien placa al actualizar/eliminar
+    txtPlaca.setEditable(false);
+}
+private void refrescarTabla() {
+    modeloTabla.setRowCount(0);
+    for (Vehiculos v : gestor.getVehiculos()) {
+        modeloTabla.addRow(new Object[]{
+            v.getPlaca(),
+            v.getMarca(),
+            v.getModelo(),
+            v.getYear(),
+            v.getTipo().name(),
+            v.getEstado().name()
+        });
+    }
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -217,23 +304,93 @@ public class JfVehiculo extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        // TODO add your handling code here:
+        try {
+        String placa = normalizarPlaca();
+        String marca = txtMarca.getText().trim();
+        String modelo = txtModelo.getText().trim();
+        int year = (int) spYear.getValue();
+        TipoVehiculo tipo = (TipoVehiculo) cmbTipo.getSelectedItem();
+        EstadoVehiculo estado = (EstadoVehiculo) cmbEstado.getSelectedItem();
+
+        Vehiculos v = new Vehiculos(placa, marca, modelo, year, tipo, estado);
+        gestor.agregarVehiculo(v);
+
+        refrescarTabla();
+        limpiarCampos();
+        JOptionPane.showMessageDialog(this, "Vehículo agregado.");
+    } catch (Exception ex) {
+        JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        // TODO add your handling code here:
+        try {
+        String placa = normalizarPlaca();
+        int r = JOptionPane.showConfirmDialog(this,
+                "¿Eliminar vehículo con placa " + placa + "?",
+                "Confirmar", JOptionPane.YES_NO_OPTION);
+        if (r != JOptionPane.YES_OPTION) return;
+
+        gestor.eliminarVehiculo(placa);
+
+        refrescarTabla();
+        limpiarCampos();
+        JOptionPane.showMessageDialog(this, "Vehículo eliminado.");
+    } catch (Exception ex) {
+        JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        // TODO add your handling code here:
+         try {
+        String placa = normalizarPlaca();
+        Vehiculos v = gestor.buscarVehiculo(placa);
+        if (v == null) {
+            JOptionPane.showMessageDialog(this, "No existe vehículo con esa placa.");
+            return;
+        }
+
+        // Rellenar campos
+        txtPlaca.setText(v.getPlaca());
+        txtMarca.setText(v.getMarca());
+        txtModelo.setText(v.getModelo());
+        spYear.setValue(v.getYear());
+        cmbTipo.setSelectedItem(v.getTipo());
+        cmbEstado.setSelectedItem(v.getEstado());
+        txtPlaca.setEditable(false);
+
+        // Seleccionar fila correspondiente en la tabla (si está listada)
+        for (int i = 0; i < modeloTabla.getRowCount(); i++) {
+            if (String.valueOf(modeloTabla.getValueAt(i, 0)).equalsIgnoreCase(v.getPlaca())) {
+                tblVehiculos.setRowSelectionInterval(i, i);
+                tblVehiculos.scrollRectToVisible(tblVehiculos.getCellRect(i, 0, true));
+                break;
+            }
+        }
+    } catch (Exception ex) {
+        JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
-        // TODO add your handling code here:
+          try {
+        String placa = normalizarPlaca();
+        String modelo = txtModelo.getText().trim();
+        TipoVehiculo tipo = (TipoVehiculo) cmbTipo.getSelectedItem();
+        EstadoVehiculo estado = (EstadoVehiculo) cmbEstado.getSelectedItem();
+
+        gestor.actualizarVehiculo(placa, modelo, tipo, estado);
+
+        refrescarTabla();
+        JOptionPane.showMessageDialog(this, "Vehículo actualizado.");
+    } catch (Exception ex) {
+        JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
     }//GEN-LAST:event_btnActualizarActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+       limpiarCampos();
+    refrescarTabla();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

@@ -14,7 +14,7 @@ import java.util.ArrayList;
  */
 public class ListaClientes implements ListArray<Clientes>{
     private ArrayList<Clientes> listClientes=new ArrayList<>();
-
+  
     @Override
     public void add(Clientes t) {
        for (Clientes c : listClientes) {
