@@ -32,12 +32,11 @@ public class JfVehiculo extends javax.swing.JFrame {
 
 private void configurarPantalla() {
     
-    cmbTipo.removeAllItems();
-    for (TipoVehiculo t : TipoVehiculo.values()) cmbTipo.addItem(t);
-
-    cmbEstado.removeAllItems();
-    for (EstadoVehiculo e : EstadoVehiculo.values()) cmbEstado.addItem(e);
-
+    cmbTipo.setModel(new javax.swing.DefaultComboBoxModel<>(TipoVehiculo.values()));
+    cmbEstado.setModel(new javax.swing.DefaultComboBoxModel<>(EstadoVehiculo.values()));
+    
+TipoVehiculo tipo = (TipoVehiculo) cmbTipo.getSelectedItem();
+EstadoVehiculo estado = (EstadoVehiculo) cmbEstado.getSelectedItem();
    
     int anioActual = java.time.Year.now().getValue();
     spYear.setModel(new javax.swing.SpinnerNumberModel(anioActual, anioActual - 20, anioActual, 1));
@@ -217,27 +216,22 @@ private void refrescarTabla() {
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 140, 560));
 
         txtPlaca.setBackground(new java.awt.Color(255, 153, 51));
-        txtPlaca.setText("placa");
         txtPlaca.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel1.add(txtPlaca, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 160, 290, -1));
 
         txtModelo.setBackground(new java.awt.Color(255, 153, 51));
-        txtModelo.setText("Modelo");
         txtModelo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel1.add(txtModelo, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 280, 290, -1));
 
         txtMarca.setBackground(new java.awt.Color(255, 153, 51));
-        txtMarca.setText("Marca");
         txtMarca.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel1.add(txtMarca, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 220, 290, -1));
 
         cmbTipo.setBackground(new java.awt.Color(255, 153, 51));
-        cmbTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sedan", "SUV", "Pick-Up" }));
         cmbTipo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel1.add(cmbTipo, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 220, 260, -1));
 
         cmbEstado.setBackground(new java.awt.Color(255, 153, 51));
-        cmbEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Disponible", "En Alquiler", "Mantenimiento" }));
         cmbEstado.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel1.add(cmbEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 280, 260, -1));
 
@@ -424,8 +418,8 @@ private void refrescarTabla() {
     private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnEliminar;
-    private javax.swing.JComboBox<String> cmbEstado;
-    private javax.swing.JComboBox<String> cmbTipo;
+    private javax.swing.JComboBox<EstadoVehiculo> cmbEstado;
+    private javax.swing.JComboBox<TipoVehiculo> cmbTipo;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
